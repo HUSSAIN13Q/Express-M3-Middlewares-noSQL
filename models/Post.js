@@ -1,3 +1,5 @@
+const mongooseSlugPlugin = require("mongoose-slug-plugin");
+
 const { model, Schema } = require("mongoose");
 
 const PostSchema = new Schema({
@@ -18,4 +20,7 @@ const PostSchema = new Schema({
     required: true,
   },
 });
+
+PostSchema.plugin(mongooseSlugPlugin, { tmpl: "<%=title%>" });
+
 module.exports = model("Post", PostSchema);
