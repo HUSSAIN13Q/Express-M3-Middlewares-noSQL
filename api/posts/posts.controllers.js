@@ -1,7 +1,9 @@
 const Post = require("../../models/Post");
 
-exports.postsCreate = async (req, res) => {
+exports.postsCreate = async (req, res, next) => {
   try {
+    if (req.file)
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
     const newPost = await Post.create(req.body);
     res.status(201).json(newPost);
   } catch (error) {
@@ -27,6 +29,9 @@ exports.postsDelete = async (req, res, next) => {
 exports.postsUpdate = async (req, res, next) => {
   const { postId } = req.params;
   try {
+    if (req.file)
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
+
     const foundPost = await Post.findById(postId);
     if (foundPost) {
       await foundPost.updateOne(req.body);
